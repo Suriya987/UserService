@@ -33,7 +33,8 @@ public class UserServices : IUserService
         var AuthClientRequest = new SaveCredenetialRequestBO
         {
             UserId = user.UserId,
-            Password = request.Password
+            Password = request.Password,
+            Email = request.Email
         };
 
 

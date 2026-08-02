@@ -16,10 +16,6 @@ public partial class ChatApplicationDbContext : DbContext
     {
     }
 
-    public virtual DbSet<AuthCredential> AuthCredentials { get; set; }
-
-    public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
-
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -28,55 +24,6 @@ public partial class ChatApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<AuthCredential>(entity =>
-        {
-            entity.HasKey(e => e.AuthCredentialId).HasName("PK__AuthCred__5DB27DEF5D08BDD2");
-
-            entity.Property(e => e.AuthCredentialId).HasColumnName("authCredentialId");
-            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
-            entity.Property(e => e.PasswordChangedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnName("passwordChangedAt");
-            entity.Property(e => e.PasswordHash)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("passwordHash");
-            entity.Property(e => e.UpdatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnName("updatedAt");
-            entity.Property(e => e.UserId).HasColumnName("userId");
-
-            entity.HasOne(d => d.User).WithMany(p => p.AuthCredentials)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_AuthCredentials_Users");
-        });
-
-        modelBuilder.Entity<RefreshToken>(entity =>
-        {
-            entity.HasKey(e => e.RefreshTokenId).HasName("PK__RefreshT__FEAC95C8E6892A9D");
-
-            entity.HasIndex(e => e.TokenHash, "IX_RefreshTokens_TokenHash");
-
-            entity.HasIndex(e => e.UserId, "IX_RefreshTokens_UserId");
-
-            entity.Property(e => e.RefreshTokenId).HasColumnName("refreshTokenId");
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnName("createdAt");
-            entity.Property(e => e.ExpiresAt).HasColumnName("expiresAt");
-            entity.Property(e => e.RevokedAt).HasColumnName("revokedAt");
-            entity.Property(e => e.TokenHash)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("tokenHash");
-            entity.Property(e => e.UserId).HasColumnName("userId");
-
-            entity.HasOne(d => d.User).WithMany(p => p.RefreshTokens)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK_RefreshTokens_Users");
-        });
-
         modelBuilder.Entity<User>(entity =>
         {
             entity.HasKey(e => e.UserId).HasName("PK__Users__CB9A1CFFA6F06741");
