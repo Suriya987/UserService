@@ -2,6 +2,10 @@ using Microsoft.EntityFrameworkCore;
 using UserService.DbContexts;
 using UserService.IFactory;
 using UserService.Factory;
+using UserService.IServices;
+using UserService.Services;
+using UserService.IRepository;
+using UserService.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +26,8 @@ builder.Services.AddDbContextFactory<ChatApplicationDbContext>(options =>
 });
 
 builder.Services.AddScoped<IDbChatApplicationContextFactory, DbChatApplicationContextFactory>();
+builder.Services.AddScoped<IUserService,UserServices>();
+builder.Services.AddScoped<IUserRepository,UserRepository>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
