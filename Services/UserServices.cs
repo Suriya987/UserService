@@ -8,10 +8,12 @@ namespace UserService.Services;
 public class UserServices : IUserService
 {
     private readonly IUserRepository _userRepository;
+    private readonly IAuthServiceClient _authClient;
 
-    public UserServices(IUserRepository userRepository)
+    public UserServices(IUserRepository userRepository, IAuthServiceClient authClient)
     {
         _userRepository = userRepository;
+        _authClient = authClient;
     }
 
     public async Task<UserBO> RegisterAsync(UserBO request)
@@ -27,7 +29,19 @@ public class UserServices : IUserService
 
         await _userRepository.RegisterAsync(user);
 
+        //Make Auth Service call
+        var AuthClientRequest = new SaveCredenetialRequestBO
+        {
+            UserId = user.UserId,
+            Password = request.Password
+        };
+
+
+        var result = await _authClient.SaveCredentialAsync(AuthClientRequest);
+
+
         request.UserId = user.UserId;
+        request.Password = null;
 
         return request;
     }

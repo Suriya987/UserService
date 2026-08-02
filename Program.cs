@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using UserService.DbContexts;
-using UserService.IFactory;
 using UserService.Factory;
-using UserService.IServices;
-using UserService.Services;
+using UserService.Helper;
+using UserService.IFactory;
 using UserService.IRepository;
+using UserService.IServices;
 using UserService.Repository;
+using UserService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,9 +26,16 @@ builder.Services.AddDbContextFactory<ChatApplicationDbContext>(options =>
         builder.Configuration.GetConnectionString("UserServiceDb"));
 });
 
+builder.Services.AddHttpClient<IAuthServiceClient, AuthServiceClient>(client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7018/");
+});
+
 builder.Services.AddScoped<IDbChatApplicationContextFactory, DbChatApplicationContextFactory>();
 builder.Services.AddScoped<IUserService,UserServices>();
 builder.Services.AddScoped<IUserRepository,UserRepository>();
+builder.Services.AddHttpClient<IHttpClientHelper, HttpClientHelper>();
+//builder.Services.AddScoped<IAuthServiceClient,Auth>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
