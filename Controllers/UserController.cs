@@ -19,9 +19,17 @@ public class UserController : ControllerBase
     [HttpPost("Register")]
     public async Task<IActionResult> Register([FromBody] UserBO request)
     {
-        var response = await _userService.RegisterAsync(request);
+        try
+        {
+            var response = await _userService.RegisterAsync(request);
 
-        return Ok(response);
+            return Ok(response);
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        return Ok(new User());
     }
 
     [HttpGet("GetUserById/{userId:long}")]

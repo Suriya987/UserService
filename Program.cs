@@ -14,11 +14,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-//builder.Services.AddDbContext<ChatApplicationDbContext>(options =>
-//{
-//    options.UseSqlServer(
-//        builder.Configuration.GetConnectionString("DefaultConnection"));
-//});
+//CORS
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ReactFrontend", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 builder.Services.AddDbContextFactory<ChatApplicationDbContext>(options =>
 {
@@ -52,8 +59,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors("ReactFrontend");
+
 app.UseAuthorization();
 
 app.MapControllers();
-
 app.Run();
