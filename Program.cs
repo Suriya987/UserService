@@ -27,10 +27,13 @@ builder.Services.AddCors(options =>
     });
 });
 
+Console.WriteLine(builder.Configuration.GetConnectionString("DefaultConnection"));
+
 builder.Services.AddDbContextFactory<ChatApplicationDbContext>(options =>
 {
+    // Use the connection string key that exists in appsettings.json
     options.UseSqlServer(
-        builder.Configuration.GetConnectionString("UserServiceDb"));
+        builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 builder.Services.AddHttpClient<IAuthServiceClient, AuthServiceClient>(client =>

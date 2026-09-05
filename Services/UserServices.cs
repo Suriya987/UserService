@@ -25,6 +25,7 @@ public class UserServices : IUserService
             PhoneNumber = request.PhoneNumber,
             ProfileImageUrl = request.ProfileImageUrl,
             CreatedAt = DateTime.UtcNow,
+            UpdatedAt=DateTime.UtcNow
         };
 
         await _userRepository.RegisterAsync(user);

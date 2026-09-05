@@ -18,11 +18,18 @@ public class UserRepository : IUserRepository
 
     public async Task RegisterAsync(User user)
     {
-        await using var context = await _tenantDbContextFactory.CreateDbContextAsync();
+        try
+        {
+            await using var context = await _tenantDbContextFactory.CreateDbContextAsync();
 
-        await context.Users.AddAsync(user);
+            await context.Users.AddAsync(user);
 
-        await context.SaveChangesAsync();
+            await context.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+
+        }
     }
 
     public async Task<User?> GetUserByIdAsync(long userId)
