@@ -45,5 +45,24 @@ public class UserController : ControllerBase
         return Ok(response);
     }
 
+    [HttpGet("Search")]
+    public async Task<IActionResult> SearchUsers(
+    [FromQuery] string displayName)
+    {
+        if (string.IsNullOrWhiteSpace(displayName))
+        {
+            return Ok(new
+            {
+                users = new List<UserBO>()
+            });
+        }
 
+        var users =
+            await _userService.SearchUsersAsync(displayName);
+
+        return Ok(new
+        {
+            users
+        });
+    }
 }

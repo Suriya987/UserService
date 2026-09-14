@@ -40,4 +40,31 @@ public class UserRepository : IUserRepository
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.UserId == userId);
     }
+
+    public async Task<List<User>> SearchUsersAsync(string displayName)
+    {
+        try
+        {
+            await using var context = await _tenantDbContextFactory.CreateDbContextAsync();
+
+            displayName = displayName.Trim();
+
+            return await context.Users
+                .AsNoTracking()
+                .Where(x =>
+                    x.DisplayName.Contains(displayName))
+                .OrderBy(x =>
+                    x.DisplayName == displayName ? 0 :
+                    x.DisplayName.StartsWith(displayName) ? 1 :
+                    2)
+                .ThenBy(x => x.DisplayName)
+                .Take(15)
+                .ToListAsync();
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return new List<User>();
+        }
+    }
 }

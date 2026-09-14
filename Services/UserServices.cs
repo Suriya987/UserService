@@ -64,4 +64,18 @@ public class UserServices : IUserService
             ProfileImageUrl = user.ProfileImageUrl
         };
     }
+
+    public async Task<List<UserBO>> SearchUsersAsync(string displayName)
+    {
+        var users =  await _userRepository.SearchUsersAsync(displayName);
+
+        return users
+            .Select(user => new UserBO
+            {
+                UserId = user.UserId,
+                DisplayName = user.DisplayName,
+                ProfileImageUrl= user.ProfileImageUrl
+            })
+            .ToList();
+    }
 }

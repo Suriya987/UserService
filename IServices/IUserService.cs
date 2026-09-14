@@ -7,4 +7,5 @@ public interface IUserService
 {
     Task<UserBO> RegisterAsync(UserBO request);
     Task<UserBO?> GetUserByIdAsync(long userId);
+    Task<List<UserBO>> SearchUsersAsync(string displayName);
 }
