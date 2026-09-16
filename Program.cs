@@ -38,7 +38,7 @@ builder.Services.AddDbContextFactory<ChatApplicationDbContext>(options =>
 
 builder.Services.AddHttpClient<IAuthServiceClient, AuthServiceClient>(client =>
 {
-    client.BaseAddress = new Uri("https://localhost:7018/");
+    client.BaseAddress = new Uri("https://authservice-gtr4.onrender.com");
 });
 
 builder.Services.AddScoped<IDbChatApplicationContextFactory, DbChatApplicationContextFactory>();
